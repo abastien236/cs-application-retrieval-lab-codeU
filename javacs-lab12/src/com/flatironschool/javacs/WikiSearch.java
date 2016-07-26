@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import redis.clients.jedis.Jedis;
@@ -78,7 +79,8 @@ public class WikiSearch {
 	public WikiSearch and(WikiSearch that) {
         // FILL THIS IN!
 		Map<String, Integer> intersection = new HashMap<String, Integer>();
-		for (String temp: map.keySet()) {
+		Set<String> set = map.keySet();
+		for (String temp: set){
 			if (that.map.containsKey(temp)) {
 				int rel = totalRelevance(this.map.get(temp), that.map.get(temp));
 				intersection.put(temp, rel);
