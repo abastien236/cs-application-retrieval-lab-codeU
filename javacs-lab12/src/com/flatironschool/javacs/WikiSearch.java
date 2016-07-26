@@ -61,7 +61,12 @@ public class WikiSearch {
 	 */
 	public WikiSearch or(WikiSearch that) {
         // FILL THIS IN!
-		return null;
+		Map<String, Integer> union = new HashMap<String, Integer>(map);
+		for (String temp: that.map.keySet()) {
+			int rel = totalRelevance(this.getRelevance(temp), that.getRelevance(temp));
+			union.put(temp, rel);
+		}
+		return new WikiSearch(union);
 	}
 	
 	/**
@@ -72,7 +77,14 @@ public class WikiSearch {
 	 */
 	public WikiSearch and(WikiSearch that) {
         // FILL THIS IN!
-		return null;
+		Map<String, Integer> intersection = new HashMap<String, Integer>();
+		for (String temp: map.keySet()) {
+			if (that.map.containsKey(temp)) {
+				int rel = totalRelevance(this.map.get(temp), that.map.get(temp));
+				intersection.put(temp, rel);
+			}
+		}
+		return new WikiSearch(intersection);
 	}
 	
 	/**
@@ -83,7 +95,11 @@ public class WikiSearch {
 	 */
 	public WikiSearch minus(WikiSearch that) {
         // FILL THIS IN!
-		return null;
+		Map<String, Integer> difference = new HashMap<String, Integer>(map);
+		for (String temp: that.map.keySet()) {
+			difference.remove(temp);
+		}
+		return new WikiSearch(difference);
 	}
 	
 	/**
@@ -105,7 +121,20 @@ public class WikiSearch {
 	 */
 	public List<Entry<String, Integer>> sort() {
         // FILL THIS IN!
-		return null;
+		List<Entry<String, Integer>> entries = 
+				new LinkedList<Entry<String, Integer>>(map.entrySet());
+		
+		// make a Comparator object for sorting
+		Comparator<Entry<String, Integer>> comparator = new Comparator<Entry<String, Integer>>() {
+            @Override
+            public int compare(Entry<String, Integer> ent1, Entry<String, Integer> ent2) {
+                return ent1.getValue().compareTo(ent2.getValue());
+            }
+        };
+        
+        // sort and return the entries
+		Collections.sort(entries, comparator);
+		return entries;
 	}
 
 	/**
